@@ -127,6 +127,10 @@ refactor/description
 perf/my-perf-improvement
 ```
 
+### When to rebase
+**Rebase your branch before merge, and before merge only** to clean things up. Keep your commit history, it will be useful and you will maybe need to rollback/delete things while your feature is not ready.
+Then you can clean things up by using squash/fixup, you can have multiple commits when merged but it have to be working state commits.
+
 ### Submitting a Pull Request
 Create a branch to base your feature on, `git checkout -b feature/my-branch`.
 
