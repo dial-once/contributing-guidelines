@@ -5,89 +5,7 @@ Please refer to the sample project adapted to the project developed (list to be 
   - node microservice: https://github.com/dial-once/sample-node-microservice
 
 ## Coding rules
-### node.js
-
-A very good inspiration on how to do JavaScript is to read the Guidelines of AirBnb: https://github.com/airbnb/javascript
-
-  - Version your packages using semver
-  - Wrap your code under 100 characters / line and avoid too large files
-  - 2 spaces indentation (no tabulation)
-  - Keep your code as simple as possible (see below)
-
-#### Code style
-
-  - Camel case
-  - Use simple objects
-  - Prototype usage is forbidden
-  - 100 char / line
-  - Use space for idents (2)
-
-#### Keep it simple
-Never try to handle all the edge cases and try to make it modular: you will most probably make it harder to maintain and introduce bug, plus it will take you more time!
-
-In the sample below, the two piece of code are doing the same thing:
-
-```js
-//bad
-var modules = ['module1', 'module2', 'module3'];
-
-function easyLoader(moduleName) {
-  if (!moduleName || moduleName.length === 0) throw new Error('Invalid parameter, must be a string.');
-  if (modules.indexOf(moduleName.toLowerCase()) === -1 throw new Error('Invalid module, undeclared!');
-  
-  if (!require('fs').lstatSync('node_modules/' + moduleName).isDirectory()) throw new Error('Packages are not installed!');
-  return require(moduleName);
-}
-
-module.exports = easyLoader;
-
-
-//good
-function easyLoader(moduleName) {
-  return require(moduleName);
-}
-module.exports = easyLoader;
-```
-
-The first one may appear more complete but it do the same: if module does not exists, it will crash (plus it is very incomplete, has many flaws and dont test the correct things).
-
-Keep in mind that some will read your code to debug it someday, or add a feature. And also something very important:
-**if your module is improperly used, it is ok for it to crash! just document it**
-
-#### jshintrc
-Use the following .jshintrc for your project, it should cover most cases (tests, node, etc.) :
-```json
-{
-  "node": true,
-  "mocha": true,
-  "esversion": 6,
-  "curly": false,
-  "camelcase": true,
-  "eqeqeq": true,
-  "indent": 2,
-  "maxlen": 100,
-  "quotmark": "single",
-  "maxcomplexity": 8,
-  "undef": true,
-  "unused": true,
-  "globals": {
-	"after": true,
-	"assert": true,
-	"before": true,
-	"describe": true,
-	"it": true
-  }
-}
-```
-
-#### File naming convention
-```js
-my-file.js //yes!
-myFile.js //no!
-myfile.js //no!
-MyFile.js //no!
-my_file.js //no!
-```
+`node.js`: https://github.com/dial-once/javascript
 
 ## Code quality
 All projects are analysed by SonarQube, requires A-grade technical debt,  and at least 80% of functional coverage
@@ -122,6 +40,7 @@ Just don’t do it. Work on a branch and create a PR once the work is completely
 Worst case scenario: Add an issue if you really need to keep track of something you don’t have time to do. 
 
 ## Git usage guidelines
+
 ### Commit messages
 Commits must be atomic and commit message must be short and specific. Detailed comments goes after a line break.
 ```
@@ -150,7 +69,8 @@ Why:
 
 The lint issue commit should never have been there: squash it into the previous commit. Same thing for the comment: squash. In this example there should be only 1 commit. If you already pushed, that’s not a problem: fix it and force push. If you are on develop: throw a cookie jar and ask to everyone working on the project if it’s ok if you force push (if less than 1 minute you can do it discretely :D).
 
-### Branch names
+### Branches
+We follow Vincent Driessen method: http://nvie.com/posts/a-successful-git-branching-model/ (gitflow)  
 Prefix your branch name with the type of modification you are doing.
 
 ```
@@ -165,22 +85,35 @@ perf/my-perf-improvement
 **Rebase your branch before merge, and before merge only** to clean things up. Keep your commit history, it will be useful and you will maybe need to rollback/delete things while your feature is not ready.
 Then you can clean things up by using squash/fixup, you can have multiple commits when merged but it have to be working state commits.
 
-### Submitting a Pull Request
+### Pull Requests
 Create a branch to base your feature on, `git checkout -b feature/my-branch`.
 
 Make your changes respecting our coding rules, execute tests and when your feature is ready, create your PR on Github on the develop branch.
 
 Dial Once interns create branches on the main repo, contributors must fork the project.
 
-### Deployment pull request (develop > master)
-`develop > master` pull requests are deployment pull requests: they should be named using semver and the last commit on the branch before merge should be tagged with the version name (use `git tag -a`).
+#### Pull Requests - dev workflow
+ - Work on a branch
+ - Do your commits the way you want - atomic commits are advised
+ - Open a PR if you want to have a discussion or submit your code for review
+ - Assign yourself on the PR if the PR is not done yet and require some intervention of your part (cleanup before merge, etc.)
+ - Assign the persons that you want to get a review from 
+ - Assignees remove themselves once reviewed and LGTM'd
+ - Once branch ready to merge (LGTM green or explicit comment from a reviewer) perform any needed cleanup and remove yourself if you are assigned
+ - PR with status green and no assignee car be merged anytime by anyone (if you need it, LGTM'd and green, merge it) - Otherwise the latest assignee can merge
 
-Example or Pull Request commits, PR name is v0.2.0:
+Then in Github PR, you can check only PR where you are assigned: it will simplify your work so you know instantly if you have some work to do / some review requested by someone
+
+### Deployment pull request (develop > master)
+
+`release/vx.x.x > (master|develop)` pull requests are deployment pull requests: they should be named using semver and the last commit on the branch before merge should be tagged with the version name (use `git tag -a`).
+
+Example or Pull Request commits, PR name is `release/v0.2.0`:
 ```
  - Fix bad typo on comment for device register method
  - Add a new route for phone number validation (reserved to India)
  - Fix weird behaviour on something
  - v0.2.0 (Tag here)
 ```
-
+See gitflow: http://nvie.com/posts/a-successful-git-branching-model/
 
