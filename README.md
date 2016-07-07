@@ -7,43 +7,77 @@ Please refer to the sample project adapted to the project developed (list to be 
 ## Coding rules
 ### node.js
 
+A very good inspiration on how to do JavaScript is to read the Guidelines of AirBnb: https://github.com/airbnb/javascript
+
   - Version your packages using semver
   - Wrap your code under 100 characters / line and avoid too large files
   - 2 spaces indentation (no tabulation)
+  - Keep your code as simple as possible (see below)
 
 #### Code style
 
+  - Camel case
+  - Use simple objects
+  - Prototype usage is forbidden
+  - 100 char / line
+  - Use space for idents (2)
+
+#### Keep it simple
+Never try to handle all the edge cases and try to make it modular: you will most probably make it harder to maintain and introduce bug, plus it will take you more time!
+
+In the sample below, the two piece of code are doing the same thing:
+
 ```js
-var aVariable;
-function aFunctionName();
-var Object = () => {}; //avoid defining complex objects like this until we are ES6
+//bad
+var modules = ['module1', 'module2', 'module3'];
+
+function easyLoader(moduleName) {
+  if (!moduleName || moduleName.length === 0) throw new Error('Invalid parameter, must be a string.');
+  if (modules.indexOf(moduleName.toLowerCase()) === -1 throw new Error('Invalid module, undeclared!');
+  
+  if (!require('fs').lstatSync('node_modules/' + moduleName).isDirectory()) throw new Error('Packages are not installed!');
+  return require(moduleName);
+}
+
+module.exports = easyLoader;
+
+
+//good
+function easyLoader(moduleName) {
+  return require(moduleName);
+}
+module.exports = easyLoader;
 ```
 
-Instead of complex inheritance hierarchies, we prefer simple objects. We use prototypal inheritance only when absolutely necessary.
+The first one may appear more complete but it do the same: if module does not exists, it will crash (plus it is very incomplete, has many flaws and dont test the correct things).
 
+Keep in mind that some will read your code to debug it someday, or add a feature. And also something very important:
+**if your module is improperly used, it is ok for it to crash! just document it**
+
+#### jshintrc
 Use the following .jshintrc for your project, it should cover most cases (tests, node, etc.) :
 ```json
 {
   "node": true,
   "mocha": true,
+  "esversion": 6,
   "curly": false,
+  "camelcase": true,
+  "eqeqeq": true,
+  "indent": 2,
+  "maxlen": 100,
   "quotmark": "single",
   "maxcomplexity": 8,
+  "undef": true,
   "unused": true,
   "globals": {
 	"after": true,
 	"assert": true,
 	"before": true,
 	"describe": true,
-	"expect": true,
 	"it": true
   }
 }
-```
-
-One-liners are allowed when they provides a better readability:
-```js
-if (testCase) return true;
 ```
 
 #### File naming convention
@@ -73,15 +107,15 @@ Usage of libs not included for a set of tools described below is forbidden (ie: 
 
 ## Tools
 ### node.js
-tests: mocha, istanbul for coverage 
+Tests: mocha, istanbul for coverage 
 
-logs: winston 
+Logs: winston 
 
-Array / Object manipulation: lodash or native 
+Array / Object manipulation: native 
 
 Bug report: bugsnag 
 
-Docker: base image is dialonce/nodejs:latest
+Docker: base image is `dialonce/nodejs:latest`. If you use dynamic loaded c++ node modules, you can use `dialonce/nodejs:dynamic`.
 
 ## Note about @todos
 Just don’t do it. Work on a branch and create a PR once the work is completely done.
