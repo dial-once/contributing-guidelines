@@ -117,3 +117,23 @@ Example or Pull Request commits, PR name is `release/v0.2.0`:
 ```
 See gitflow: http://nvie.com/posts/a-successful-git-branching-model/
 
+### Testing a microservice
+
+There is two things about testing on our current environment:
+  - We use some staging services (broker)
+  - The microservice may use some database
+
+### Write testable code
+When you code, think about your tests. You will then make a very readable and testable code. The best thing of all is to use TDD so you will create a nice API and manage all the cases that you want to manage.
+If you write your code before the tests, it may need difficult changes to make it testable without acks.
+
+#### Datasource
+Each service must have independant data source. To ensure this is the case, you must spawn your local DB in your test suite, provision it, run your tests using it, and then destroy it.
+
+#### Staging broker usage
+You can use the staging broker in your tests if necessary (if it can be avoided, best to do it!), but make sure your subscriber queues are marked as non-persistent (durable is set to false) when your tests are running (so the broker is cleaned up after your tests). On `node-bunnymq`, this can't be done yet: https://github.com/dial-once/node-bunnymq/issues/51
+
+As there is no real value of testing non-RPC calls (you don't even know if you call it correctly :x), you can mock those.
+
+
+
