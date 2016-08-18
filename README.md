@@ -125,7 +125,7 @@ There is two things about testing on our current environment:
 
 ### Write testable code
 When you code, think about your tests. You will then make a very readable and testable code. The best thing of all is to use TDD so you will create a nice API and manage all the cases that you want to manage.
-If you write your code before the tests, it may need difficult changes to make it testable without acks.
+If you write your code before the tests, it may need difficult changes to make it testable without hack.
 
 #### Datasource
 Each service must have independant data source. To ensure this is the case, you must spawn your local DB in your test suite, provision it, run your tests using it, and then destroy it.
