@@ -12,7 +12,7 @@ All projects are analysed by SonarQube, requires A-grade technical debt,  and at
 All external faced projects must have up to date dependencies and maintainer should subscribe to security notification for his project Snyk
 
 ## Documentation
-Provide one or multiple use case examples in example/ folder
+Provide one or multiple use case examples in example/ folder or in README.md
 Provide some basic info in README.md about usage, things to know, maintainer, and…
 ADD BADGEEEES (so we can track deps, version, code quality, build status in a single check) in the README.md
 
@@ -27,13 +27,21 @@ Usage of libs not included for a set of tools described below is forbidden (ie: 
 ### node.js
 Tests: mocha, istanbul for coverage 
 
-Logs: winston 
+Logs: use the logger in https://github.com/dial-once/node-microservice-boot
+```js
+const logger = require('@dialonce/boot')().logger;
+logger.info();
+```
 
-Array / Object manipulation: native 
+Array / Object manipulation: native or lodash if there is a lot of it
 
-Bug report: bugsnag 
+Bug report:  use the bug reporter in https://github.com/dial-once/node-microservice-boot
+```js
+const notifier = require('@dialonce/boot')().notifier;
+notifier.notify(e);
+```
 
-Docker: base image is `dialonce/nodejs:latest`. If you use dynamic loaded c++ node modules, you can use `dialonce/nodejs:dynamic`.
+Docker: base image is `dialonce/nodejs:latest`. If you use dynamicaly linked c++ node modules, you can use `dialonce/nodejs:dynamic`.
 
 ## Note about @todos
 Just don’t do it. Work on a branch and create a PR once the work is completely done.
