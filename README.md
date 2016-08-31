@@ -7,6 +7,26 @@ Please refer to the sample project adapted to the project developed (list to be 
 ## Coding rules
 `node.js`: https://github.com/dial-once/javascript
 
+## Makefile
+Each project should include a Makefile so everyone can use a consistent API to setup, test, and run projects.
+Makefile should implement multiple target:
+```Makefile
+deps:
+  #install required dependencies for dev and tests
+run:
+  #if runable, launch the project
+test:
+  #launch tests and coverage
+build:
+  #build the project and its artifacts
+```
+**Warning**: Please silent any command that uses potentialy sensitive information (like credentials, private endpoint, etc.) using the `@` character before the command:
+```Makefile
+login:
+  login -u dialonce -p $password #DONT do this
+  @login -u dialonce -p $password #OK
+```
+
 ## Code quality
 All projects are analysed by SonarQube, requires A-grade technical debt,  and at least 80% of functional coverage
 All external faced projects must have up to date dependencies and maintainer should subscribe to security notification for his project Snyk
