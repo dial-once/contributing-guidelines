@@ -9,6 +9,8 @@ Please refer to the sample project adapted to the project developed (list to be 
 
 ## Makefile
 Each project should include a Makefile so everyone can use a consistent API to setup, test, and run projects.
+For reference about how to write instructions in Makefile, please refer to [this guide](http://clarkgrubb.com/makefile-style-guide).
+
 Makefile should implement multiple target:
 ```Makefile
 deps:
