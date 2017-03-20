@@ -1,4 +1,4 @@
-# contributing-guidelines
+# Contributing Guidelines
 
 ## Project Structure
 Please refer to the sample project adapted to the project developed (list to be completed):
@@ -46,12 +46,13 @@ Docker: tags, size
 Usage of libs not included for a set of tools described below is forbidden (ie: in node.js, usage of bunyan to log, or usage of bluebird for promise support).
 
 ## Tools
+
 ### node.js
 Tests: mocha, istanbul for coverage 
 
 Logs: use the logger in https://github.com/dial-once/node-microservice-boot
 ```js
-const logger = require('@dialonce/boot')().logger;
+const { logger } = require('@dialonce/boot')();
 logger.info();
 ```
 
@@ -63,7 +64,9 @@ const notifier = require('@dialonce/boot')().notifier;
 notifier.notify(e);
 ```
 
-Docker: base image is `dialonce/nodejs:latest`. If you use dynamicaly linked c++ node modules, you can use `dialonce/nodejs:dynamic`.
+### docker
+
+Docker base image is `dialonce/nodejs:latest`. If you use dynamicaly linked c++ node modules, you can use `dialonce/nodejs:dynamic`.
 
 ## Note about @todos
 Just don’t do it. Work on a branch and create a PR once the work is completely done.
@@ -122,7 +125,7 @@ Make your changes respecting our coding rules, execute tests and when your featu
 
 Dial Once interns create branches on the main repo, contributors must fork the project.
 
-#### Pull Requests - dev workflow
+#### Pull Requests
  - Work on a branch
  - Do your commits the way you want - atomic commits are advised
  - Open a PR if you want to have a discussion or submit your code for review
@@ -146,6 +149,8 @@ Example or Pull Request commits, PR name is `release/v0.2.0`:
  - v0.2.0 (Tag here)
 ```
 See gitflow: http://nvie.com/posts/a-successful-git-branching-model/
+
+## Microservices
 
 ### Testing a microservice
 
