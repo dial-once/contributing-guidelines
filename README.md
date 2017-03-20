@@ -6,6 +6,7 @@ Please refer to the sample project adapted to the project developed (list to be 
 
 ## Coding rules
 `node.js`: https://github.com/dial-once/javascript
+`sql`: http://www.sqlstyle.guide/
 
 ## Makefile
 Each project should include a Makefile so everyone can use a consistent API to setup, test, and run projects.
