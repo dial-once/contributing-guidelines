@@ -23,7 +23,7 @@ test:
 build:
   #build the project and its artifacts
 ```
-**Warning**: Please silent any command that uses potentialy sensitive information (like credentials, private endpoint, etc.) using the `@` character before the command:
+**Warning**: Please silent any command that uses potentially sensitive information (like credentials, private endpoint, etc.) using the `@` character before the command:
 ```Makefile
 login:
   login -u dialonce -p $password #DONT do this
@@ -104,7 +104,7 @@ Why:
 The lint issue commit should never have been there: squash it into the previous commit. Same thing for the comment: squash. In this example there should be only 1 commit. If you already pushed, that’s not a problem: fix it and force push. If you are on develop: throw a cookie jar and ask to everyone working on the project if it’s ok if you force push (if less than 1 minute you can do it discretely :D).
 
 ### Branches
-We follow Vincent Driessen method: http://nvie.com/posts/a-successful-git-branching-model/ (gitflow)  
+We follow Vincent Driessen method: http://nvie.com/posts/a-successful-git-branching-model/ (git flow)  
 Prefix your branch name with the type of modification you are doing.
 
 ```
@@ -138,9 +138,11 @@ Dial Once interns create branches on the main repo, contributors must fork the p
 
 Then in Github PR, you can check only PR where you are assigned: it will simplify your work so you know instantly if you have some work to do / some review requested by someone
 
-### Deployment pull request (develop > master)
+### Deployment pull request (develop > master) (only if you need it reviewed)
 
 `release/vx.x.x > (master|develop)` pull requests are deployment pull requests: they should be named using semver and the last commit on the branch before merge should be tagged with the version name (use `git tag -a`).
+
+Since mostly a deployment pull request contains a tag and a version bump commit, it is not necessary to do it (git flow will do it locally on your machine) unless you deem it needs to be reviewed. You can then publish a deployment PR like this using `git flow release publish <new_version>` command.
 
 Example or Pull Request commits, PR name is `release/v0.2.0`:
 ```
@@ -149,7 +151,7 @@ Example or Pull Request commits, PR name is `release/v0.2.0`:
  - Fix weird behaviour on something
  - v0.2.0 (Tag here)
 ```
-See gitflow: http://nvie.com/posts/a-successful-git-branching-model/
+See git flow: http://nvie.com/posts/a-successful-git-branching-model/
 
 ## Microservices
 
@@ -164,12 +166,30 @@ When you code, think about your tests. You will then make a very readable and te
 If you write your code before the tests, it may need difficult changes to make it testable without hack.
 
 #### Datasource
-Each service must have independant data source. To ensure this is the case, you must spawn your local DB in your test suite, provision it, run your tests using it, and then destroy it.
+Each service must have independent data source. To ensure this is the case, you must spawn your local DB in your test suite, provision it, run your tests using it, and then destroy it.
 
 #### Staging broker usage
 You can use the staging broker in your tests if necessary (if it can be avoided, best to do it!), but make sure your subscriber queues are marked as non-persistent (durable is set to false) when your tests are running (so the broker is cleaned up after your tests). On `node-bunnymq`, this can't be done yet: https://github.com/dial-once/node-bunnymq/issues/51
 
 As there is no real value of testing non-RPC calls (you don't even know if you call it correctly :x), you can mock those.
 
+## Releases
+To do releases you will need to have [git-flow](https://github.com/petervanderdoes/gitflow-avh) installed and use it to perform a release. For more info see a [cheatsheet](https://danielkummer.github.io/git-flow-cheatsheet/).
+### Git flow set up
+To set up git flow, after installation you need to runt: `git flow init` at the root of the project/repo and accept all default settings (development branch: develop, release branch master, no version tag prefix)
+
+### Performing a release
+Open the package.json to know the current version of product and note it down. Release should be either a major, minor or patch update to the existing version per semver.
+
+In the root of the project (it's ok to be on latest updated develop git branch) do:
+ - Run `git flow release start <new_version>` (example: git flow release start 1.11.0)
+ - Git flow will instruct you to update the version so do it in package.json and commit with a "Bump to <new_version>" style commit.
+ - Run `git flow release finish <new_version>` to complete the release
+ - Push all changes and new version tag to remotes via `git push origin master develop --follow-tags`
+ - Open the project on GitHub to see the new tag under "Releases" and write down release notes in the `<new version>` tag. Release notes should contain information relevant to release (links to PR's and author mention is OK)
+  
+## Publication
+After releases some open source projects need to be published on npm. You can see currently published versions for Dial-Once [here](https://www.npmjs.com/~dial-once).
+To do this, when everything is ready and released and you are [logged in](https://docs.npmjs.com/private-modules/intro) into npm with your dial-once connected npm account just run `npm publish` from the project's root. 
 
 
